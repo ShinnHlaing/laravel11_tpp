@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 
@@ -49,3 +50,6 @@ Route::prefix('/tpp')->group(function () {
 Route::get('/categories', [CategoryController::class, 'index']);
 
 Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+
+//day1 hw
+Route::get('/article', [ArticleController::class, 'article']);
