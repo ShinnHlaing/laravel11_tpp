@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -43,13 +44,18 @@ Route::prefix('/tpp')->group(function () {
     });
 });
 
-// Route::get('/categories', function () {
-//     return view('categories.index');
-// });
 //contorller pass view
-Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 
 Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
 
+Route::get('/categories/{id}', [CategoryController::class, 'show'])->name('categories.show');
+Route::post('/categories/{id}', [CategoryController::class, 'delete'])->name('categories.delete');
 //day1 hw
 Route::get('/article', [ArticleController::class, 'article']);
+
+//product
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+Route::post('/proudcts/{id}', [ProductController::class, 'delete'])->name('products.delete');

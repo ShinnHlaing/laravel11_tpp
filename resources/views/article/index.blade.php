@@ -10,6 +10,7 @@
 
 <body style="background: rgba(69, 150, 231, 0.872); color: white">
     <h1>Article!</h1>
+    <a href="{{ route('categories.create') }}">Create Aritcle</a>
     <ul>
         @foreach ($articles as $article)
             <li style="list-style-type: none">{{ $article['name'] }} => {{ $article['Title'] }}</li>
