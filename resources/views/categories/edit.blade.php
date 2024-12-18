@@ -13,26 +13,18 @@
 <body>
 
     <div class="container">
-        {{-- error check --}}
-        @if ($errors->any())
-            <div class="text-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
         <div class="card mt-4">
             <div class="card-header">
-                Create Category
+                Edit Category
             </div>
-            <form action="{{ route('categories.store') }}" method="POST">
+            <form action="{{ route('categories.update', $category->id) }}" method="POST">
                 @csrf
-                <input type="text" name="name" placeholder="Enter Category Name" id=""
-                    class="form-control card-body" />
+                <div class="card-body">
+                    <input type="text" value="{{ $category->name }}" name="name" placeholder="Enter Category Name"
+                        id="" class="form-control card-body" />
+                </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
                     <a href="{{ route('categories.index') }}" class="btn btn-secondary">Back</a>
                 </div>
             </form>
