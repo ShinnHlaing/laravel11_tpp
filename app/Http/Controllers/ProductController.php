@@ -16,11 +16,38 @@ class ProductController extends Controller
     {
         return view('products.create');
     }
-    public function show($id)
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'price' => 'required|integer'
+        ]);
+        // Product::create([
+        //     'name' => $request->name,
+        // ]);
+        Product::create($data);
+        return redirect()->route('products.index');
+    }
+
+    public function edit($id)
     {
         $product = Product::find($id);
-        return view('products.show', compact('product'));
+        return view('products.edit', compact('product'));
     }
+
+    public function update(Request $request)
+    {
+        $product = Product::find($request->id);
+        $product->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+        ]);
+        return redirect()->route('products.index');
+    }
+
     public function delete($id)
     {
         $product = Product::find($id);
