@@ -23,6 +23,17 @@
                     <input type="text" value="{{ $category->name }}" name="name" placeholder="Enter Category Name"
                         id="" class="form-control card-body" />
                 </div>
+                <div class="card-body">
+                    <img src="{{ asset('categoryImages/' . $category->image) }}" alt="{{ $category->image }}"
+                        style="width: 50px; height:50px;">
+                </div>
+                <div class="form-check form-switch form-control">
+                    <label for="" class="form-check-label">
+                        Active or inactive
+                    </label>
+                    <input type="checkbox" name="status" id="" class="form-check-input" role="switch"
+                        checked>
+                </div>
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary">Update</button>
                     <a href="{{ route('categories.index') }}" class="btn btn-secondary">Back</a>

@@ -29,6 +29,8 @@
                 <tr>
                     <th class="bg-primary text-white">ID</th>
                     <th class="bg-primary text-white">NAME</th>
+                    <th class="bg-primary text-white">IMAGE</th>
+                    <th class="bg-primary text-white">STATUS</th>
                     <th class="bg-primary text-white">ACTION</th>
                 </tr>
             </thead>
@@ -37,6 +39,16 @@
                     <tr>
                         <th>{{ $item['id'] }}</th>
                         <th>{{ $item['name'] }}</th>
+                        <th>
+                            <img src="{{ asset('categoryImages/' . $item->image) }}" alt="{{ $item->image }}"
+                                style="width: 50px; height:50px;">
+                        </th>
+                        @if ($item['status'] == 1)
+                            <th>Active</th>
+                        @else
+                            <th>Inactive</th>
+                        @endif
+
                         <th class="d-flex">
                             <a href="{{ route('categories.edit', ['id' => $item['id']]) }}"
                                 class="btn btn-outline-secondary me-2">Edit</a>
