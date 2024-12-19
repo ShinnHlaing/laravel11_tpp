@@ -11,55 +11,57 @@
 </head>
 
 <body>
-    {{-- <h1>This is Categories</h1>
-    <a href="{{ route('categories.create') }}">+ create</a>
-    @foreach ($categories as $item)
-        <p>{{ $item['id'] }}::{{ $item['name'] }}</p>
-        <a href="{{ route('categories.edit', ['id' => $item['id']]) }}">+ edit</a>
-        <form action="{{ route('categories.delete', $item->id) }}" method="POST">
-            @csrf
-            <button>delete</button>
-        </form>
-    @endforeach --}}
+    <nav class="navbar navbar-expand-sm bg-primary navbar-dark sticky-top mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ route('categories.index') }}">Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('products.index') }}">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Stocks</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
     <div class="container">
-        <h1>Category List</h1>
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+        {{-- <h1>Category List</h1> --}}
         <a href="{{ route('categories.create') }}" class="btn btn-outline-success mb-4">Create</a>
-        <table class="table table-bordered">
+        <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th class="bg-primary text-white">ID</th>
-                    <th class="bg-primary text-white">NAME</th>
-                    <th class="bg-primary text-white">IMAGE</th>
-                    <th class="bg-primary text-white">STATUS</th>
-                    <th class="bg-primary text-white">ACTION</th>
+                    <th class="bg-primary text-white">Name</th>
+                    <th class="bg-primary text-white">Image</th>
+                    <th class="bg-primary text-white">Status</th>
+                    <th class="bg-primary text-white">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($categories as $item)
+                @foreach ($categories as $category)
                     <tr>
-                        <th>{{ $item['id'] }}</th>
-                        <th>{{ $item['name'] }}</th>
-                        <th>
-                            <img src="{{ asset('categoryImages/' . $item->image) }}" alt="{{ $item->image }}"
-                                style="width: 50px; height:50px;">
-                        </th>
-                        @if ($item['status'] == 1)
-                            <th>Active</th>
-                        @else
-                            <th>Inactive</th>
-                        @endif
-
-                        <th class="d-flex">
-                            <a href="{{ route('categories.edit', ['id' => $item['id']]) }}"
-                                class="btn btn-outline-secondary me-2">Edit</a>
-                            <form action="{{ route('categories.delete', $item->id) }}" method="POST">
+                        <td>{{ $category->name }}</td>
+                        <td><img src="{{ asset('categoryImages/' . $category->image) }}" alt="{{ $category->image }}"
+                                style="width: 50px; height:50px;"></td>
+                        <td>{{ $category->status ? 'Active' : 'Inactive' }}</td>
+                        <td>
+                            <a href="{{ route('categories.edit', $category->id) }}"
+                                class="btn btn-primary mb-3">Edit</a>
+                            <form action="{{ route('categories.delete', $category->id) }}" method="POST">
                                 @csrf
                                 <button class="btn btn-outline-danger">Delete</button>
                             </form>
-                        </th>
+                        </td>
                     </tr>
                 @endforeach
-
             </tbody>
         </table>
     </div>
