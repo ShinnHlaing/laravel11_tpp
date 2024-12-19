@@ -27,7 +27,7 @@
             <div class="card-header">
                 Create New Product
             </div>
-            <form action="{{ route('products.store') }}" method="POST">
+            <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="text" name="name" placeholder="Enter Product Name" id=""
                     class="form-control card-body" />

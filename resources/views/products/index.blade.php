@@ -11,10 +11,28 @@
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-sm bg-primary navbar-dark sticky-top mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link " href="{{ route('categories.index') }}">Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ route('products.index') }}">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Stocks</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
     <div class="container">
-        <h1>Product Lists</h1>
         <a href="{{ route('products.create') }}" class="btn btn-outline-success mb-4 ">Create</a>
-        <table class="table table-bordered">
+        <table class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th class="bg-primary text-white">ID</th>
