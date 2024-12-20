@@ -35,6 +35,16 @@
                     class="form-control card-body" />
                 <input type="text" name="price" placeholder="Enter Price" id=""
                     class="form-control card-body" />
+                <input type="file" name="image" class="form-control card-body" />
+                <div class="card-body">
+                    <div class="form-check form-switch">
+                        <label for="" class="form-check-label">
+                            Success or Pending
+                        </label>
+                        <input type="checkbox" name="status" id="" class="form-check-input" role="switch"
+                            checked>
+                    </div>
+                </div>
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary">Create</button>
                     <a href="{{ route('products.index') }}" class="btn btn-secondary">Back</a>
