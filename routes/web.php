@@ -45,17 +45,12 @@ Route::prefix('/tpp')->group(function () {
     });
 });
 
-//contorller pass view
+//category
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
-
 Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
-
 Route::post('/categories/store', [CategoryController::class, 'store'])->name('categories.store');
-
 Route::get('/categories/{id}', [CategoryController::class, 'edit'])->name('categories.edit');
-
 Route::post('/categories/{id}/update', [CategoryController::class, 'update'])->name('categories.update');
-
 Route::post('/categories/{id}', [CategoryController::class, 'delete'])->name('categories.delete');
 //day1 hw
 Route::get('/article', [ArticleController::class, 'article']);
@@ -67,3 +62,7 @@ Route::post('/products/store', [ProductController::class, 'store'])->name('produ
 Route::get('/products/{id}', [ProductController::class, 'edit'])->name('products.edit');
 Route::post('/products/{id}/update', [ProductController::class, 'update'])->name('products.update');
 Route::post('/proudcts/{id}', [ProductController::class, 'delete'])->name('products.delete');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

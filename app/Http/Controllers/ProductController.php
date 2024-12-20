@@ -4,14 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\ProductUpdateRequest;
+use App\Repositories\Category\CategoryRepositoryInterface;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Repositories\Product\ProductRepositoryInterface;
 
 class ProductController extends Controller
 {
+    protected $productRepository;
+    public function __construct(ProductRepositoryInterface $productRepository)
+    {
+        $this->productRepository = $productRepository;
+    }
     public function index()
     {
-        $products = Product::all();
+        $products = $this->productRepository->index();
+
         return view('products.index', compact('products'));
     }
     public function create()
@@ -22,45 +30,47 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $validatedData = $request->validated();
-        $data['name'] = $request->name;
-        $data['description'] = $request->description;
-        $data['price'] = $request->price;
-        $data['status'] = $request->has('status') ? true : false;
+
+        $validatedData['status'] = $request->has('status') ? true : false;
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();
             $request->image->move(public_path('productImages'), $imageName);
-            $data = array_merge($data, ['image' => $imageName]);
+            $validatedData = array_merge($validatedData, ['image' => $imageName]);
         }
-        Product::create($data);
+
+        $this->productRepository->store($validatedData);
         return redirect()->route('products.index');
     }
 
     public function edit($id)
     {
-        $product = Product::find($id);
+        $product = $this->productRepository->show($id);
         return view('products.edit', compact('product'));
     }
 
-    public function update(ProductUpdateRequest $request, $id)
+    public function update(ProductUpdateRequest $request)
     {
         $validatedData = $request->validated();
-        $product = Product::find($request->id);
-        $product->name = $request->name;
-        $product->description = $request->description;
-        $product->price = $request->price;
+        $product = $this->productRepository->show($request->id);
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();
             $request->image->move(public_path('productImages'), $imageName);
-            $product->image = $imageName;
+            $validatedData = array_merge($validatedData, ['image' => $imageName]);
         }
-        $product->status = $request->has('status') ? 1 : 0;
-        $product->update();
+
+        $product->update([
+            'name' => $validatedData['name'],
+            'description' => $validatedData['description'],
+            'price' => $validatedData['price'],
+            'image' => $imageName,
+            'status' => $request->status == 'on' ? 1 : 0,
+        ]);
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
 
     public function delete($id)
     {
-        $product = Product::find($id);
+        $product = $this->productRepository->show($id);
         $product->delete();
         return redirect()->route('products.index');
     }

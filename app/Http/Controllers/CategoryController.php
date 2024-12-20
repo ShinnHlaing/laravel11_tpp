@@ -4,16 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
 use App\Http\Requests\CategoryUpdateRequest;
-use App\Models\Category;
+use App\Repositories\Category\CategoryRepositoryInterface;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    //
+    protected $categoryRepository;
+    public function __construct(CategoryRepositoryInterface $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+
     public function index()
     {
-        $categories = Category::all();
-        // dd($categories);
+        $categories = $this->categoryRepository->index();
+
         return view('categories.index', compact('categories'));
     }
     public function create()
@@ -24,42 +29,45 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request)
     {
         $validatedData = $request->validated();
-        $data['name'] = $request->name; //validated or validate
-        $data['status'] = $request->has('status') ? true : false;
+        $validatedData['status'] = $request->has('status') ? true : false;
         if ($request->hasFile('image')) {
             // $image = $request->file('image');
             $ImageName = time() . '.' . $request->image->extension();
             $request->image->move(public_path('categoryImages'), $ImageName);
-            $data = array_merge($data, ['image' => $ImageName]);
+            $validatedData = array_merge($validatedData, ['image' => $ImageName]);
         }
-        Category::create($data);
+        $this->categoryRepository->store($validatedData);
         return redirect()->route('categories.index');
     }
 
     public function edit($id)
     {
-        $category = Category::find($id);
+        $category = $this->categoryRepository->show($id);
         return view('categories.edit', compact('category'));
     }
 
-    public function update(CategoryUpdateRequest $request, $id)
+    public function update(CategoryUpdateRequest $request)
     {
+        // dd($request);
         $validatedData = $request->validated();
-        $category = Category::find($id);
-        $category->name = $request->name;
+        $category = $this->categoryRepository->show($request->id);
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();
             $request->image->move(public_path('categoryImages'), $imageName);
-            $category->image = $imageName;
+            $validatedData = array_merge($validatedData, ['image' => $imageName]);
         }
-        $category->status = $request->has('status') ? 1 : 0;
-        $category->update();
+
+        $category->update([
+            'name' => $validatedData['name'],
+            'image' => $imageName,
+            'status' => $request->status == 'on' ? 1 : 0,
+        ]);
         return redirect()->route('categories.index')->with('success', 'Category updated successfully');
     }
 
     public function delete($id)
     {
-        $category = Category::find($id);
+        $category = $this->categoryRepository->show($id);
         $category->delete();
         return redirect()->route('categories.index');
     }
