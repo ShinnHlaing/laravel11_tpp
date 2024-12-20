@@ -30,6 +30,11 @@
             </ul>
         </div>
     </nav>
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     <div class="container">
         <a href="{{ route('products.create') }}" class="btn btn-outline-success mb-4 ">Create</a>
         <table class="table table-bordered table-striped">
@@ -39,27 +44,31 @@
                     <th class="bg-primary text-white">NAME</th>
                     <th class="bg-primary text-white">Description</th>
                     <th class="bg-primary text-white">PRICE</th>
+                    <th class="bg-primary text-white">IMAGE</th>
+                    <th class="bg-primary text-white">STATUS</th>
                     <th class="bg-primary text-white">ACTION</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($products as $item)
                     <tr>
-                        <th>{{ $item['id'] }}</th>
-                        <th>{{ $item['name'] }}</th>
-                        <th>{{ $item['description'] }}</th>
-                        <th><span>$</span>{{ $item['price'] }}</th>
-                        <th class="d-flex">
+                        <td>{{ $item['id'] }}</td>
+                        <td>{{ $item['name'] }}</td>
+                        <td>{{ $item['description'] }}</td>
+                        <td><span>$</span>{{ $item['price'] }}</td>
+                        <td><img src="{{ asset('productImages/' . $item->image) }}" alt="{{ $item->image }}"
+                                style="width: 50px; height:50px;"></td>
+                        <td>{{ $item->status ? 'Success' : 'Pending' }}</td>
+                        <td class="d-flex">
                             <a href="{{ route('products.edit', ['id' => $item['id']]) }}"
                                 class="btn btn-outline-secondary me-2">Edit</a>
                             <form action="{{ route('products.delete', $item->id) }}" method="POST">
                                 @csrf
                                 <button class="btn btn-outline-danger">Delete</button>
                             </form>
-                        </th>
+                        </td>
                     </tr>
                 @endforeach
-
             </tbody>
         </table>
     </div>
