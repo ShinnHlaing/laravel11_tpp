@@ -53,18 +53,30 @@ class ProductController extends Controller
         $validatedData = $request->validated();
         $product = $this->productRepository->show($request->id);
         if ($request->hasFile('image')) {
+            if ($product->image) {
+                $oldImgPath = public_path('productImages') . '/' . $product->image;
+                if (file_exists($oldImgPath)) {
+                    unlink($oldImgPath);
+                }
+            };
             $imageName = time() . '.' . $request->image->extension();
             $request->image->move(public_path('productImages'), $imageName);
             $validatedData = array_merge($validatedData, ['image' => $imageName]);
+            $product->update([
+                'name' => $validatedData['name'],
+                'description' => $validatedData['description'],
+                'price' => $validatedData['price'],
+                'image' => $imageName,
+                'status' => $request->status == 'on' ? 1 : 0,
+            ]);
+        } else {
+            $product->update([
+                'name' => $validatedData['name'],
+                'description' => $validatedData['description'],
+                'price' => $validatedData['price'],
+                'status' => $request->status == 'on' ? 1 : 0,
+            ]);
         }
-
-        $product->update([
-            'name' => $validatedData['name'],
-            'description' => $validatedData['description'],
-            'price' => $validatedData['price'],
-            'image' => $imageName,
-            'status' => $request->status == 'on' ? 1 : 0,
-        ]);
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
 

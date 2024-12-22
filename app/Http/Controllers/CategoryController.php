@@ -6,6 +6,7 @@ use App\Http\Requests\CategoryRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -48,20 +49,30 @@ class CategoryController extends Controller
 
     public function update(CategoryUpdateRequest $request)
     {
-        // dd($request);
         $validatedData = $request->validated();
         $category = $this->categoryRepository->show($request->id);
+
         if ($request->hasFile('image')) {
+            if ($category->image) {
+                $oldImagePath = public_path('categoryImages') . '/' . $category->image;
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
             $imageName = time() . '.' . $request->image->extension();
             $request->image->move(public_path('categoryImages'), $imageName);
             $validatedData = array_merge($validatedData, ['image' => $imageName]);
+            $category->update([
+                'name' => $validatedData['name'],
+                'image' => $imageName,
+                'status' => $request->status == 'on' ? 1 : 0,
+            ]);
+        } else {
+            $category->update([
+                'name' => $validatedData['name'],
+                'status' => $request->status == 'on' ? 1 : 0,
+            ]);
         }
-
-        $category->update([
-            'name' => $validatedData['name'],
-            'image' => $imageName,
-            'status' => $request->status == 'on' ? 1 : 0,
-        ]);
         return redirect()->route('categories.index')->with('success', 'Category updated successfully');
     }
 
