@@ -37,40 +37,28 @@
     @endif
     <div class="container">
         <a href="{{ route('products.create') }}" class="btn btn-outline-success mb-4 ">Create</a>
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th class="bg-primary text-white">ID</th>
-                    <th class="bg-primary text-white">NAME</th>
-                    <th class="bg-primary text-white">Description</th>
-                    <th class="bg-primary text-white">PRICE</th>
-                    <th class="bg-primary text-white">IMAGE</th>
-                    <th class="bg-primary text-white">STATUS</th>
-                    <th class="bg-primary text-white">ACTION</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($products as $item)
-                    <tr>
-                        <td>{{ $item['id'] }}</td>
-                        <td>{{ $item['name'] }}</td>
-                        <td>{{ $item['description'] }}</td>
-                        <td><span>$</span>{{ $item['price'] }}</td>
-                        <td><img src="{{ asset('productImages/' . $item->image) }}" alt="{{ $item->image }}"
-                                style="width: 50px; height:50px;"></td>
-                        <td>{{ $item->status ? 'Success' : 'Pending' }}</td>
-                        <td class="d-flex">
-                            <a href="{{ route('products.edit', ['id' => $item['id']]) }}"
-                                class="btn btn-outline-secondary me-2">Edit</a>
-                            <form action="{{ route('products.delete', $item->id) }}" method="POST">
+        <div class="row">
+            @foreach ($products as $item)
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{{ asset('productImages/' . $item->image) }}" class="card-img-middle"
+                            alt="{{ $item->image }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $item->name }}</h5>
+                            <p class="card-text">{{ $item->description }}</p>
+                            <p class="card-text"><strong>Price:</strong> ${{ $item->price }}</p>
+                            <p class="card-text"><strong>Status:</strong> {{ $item->status ? 'Success' : 'Pending' }}
+                            </p>
+                            <a href="{{ route('products.edit', $item->id) }}" class="btn btn-primary">Edit</a>
+                            <form action="{{ route('products.delete', $item->id) }}" method="POST" class="d-inline">
                                 @csrf
-                                <button class="btn btn-outline-danger">Delete</button>
+                                <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous">
