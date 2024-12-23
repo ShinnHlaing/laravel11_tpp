@@ -9,7 +9,8 @@ class ProductRepository implements ProductRepositoryInterface
 {
     public function index()
     {
-        return Product::all();
+        $products = Product::with('category')->get();
+        return $products;
     }
     public function store($validatedData)
     {

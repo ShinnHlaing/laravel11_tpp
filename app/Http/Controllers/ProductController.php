@@ -14,6 +14,7 @@ class ProductController extends Controller
     protected $productRepository;
     public function __construct(ProductRepositoryInterface $productRepository)
     {
+        // $this->middleware('auth');
         $this->productRepository = $productRepository;
     }
     public function index()
@@ -24,7 +25,8 @@ class ProductController extends Controller
     }
     public function create()
     {
-        return view('products.create');
+        $products = Product::get();
+        return view('products.create', compact('products'));
     }
 
     public function store(ProductRequest $request)

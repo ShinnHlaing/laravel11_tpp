@@ -36,6 +36,11 @@
                 <input type="text" name="price" placeholder="Enter Price" id=""
                     class="form-control card-body" />
                 <input type="file" name="image" class="form-control card-body" />
+                <select name="" class="form-select" id="">
+                    @foreach ($products as $product)
+                        <option value="">{{ $product->category->name }}</option>
+                    @endforeach
+                </select>
                 <div class="card-body">
                     <div class="form-check form-switch">
                         <label for="" class="form-check-label">
