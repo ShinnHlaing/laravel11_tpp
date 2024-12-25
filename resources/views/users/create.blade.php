@@ -25,35 +25,29 @@
         @endif
         <div class="card mt-4">
             <div class="card-header">
-                Create New Product
+                Create User
             </div>
-            <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('users.store') }}" method="POST">
                 @csrf
-                <input type="text" name="name" placeholder="Enter Product Name" id=""
+                <input type="text" name="name" placeholder="Enter User Name" id=""
                     class="form-control card-body" />
-                <input type="text" name="description" placeholder="Enter Product Description" id=""
+                <input type="email" name="email" placeholder="Enter Email Address" id=""
                     class="form-control card-body" />
-                <input type="text" name="price" placeholder="Enter Price" id=""
+                <input type="date" name="created_at" placeholder="Choose Date" id=""
                     class="form-control card-body" />
-                <input type="file" name="image" class="form-control card-body" />
-                <select name="category_id" class="form-select" id="">
-                    @foreach ($categories as $category)
-                        <option name="category_id" value="{{ $category->id }}">{{ $category->name }}
-                        </option>
-                    @endforeach
-                </select>
-                <div class="card-body">
+                {{-- <input type="file" name="image" class="form-control card-body" /> --}}
+                {{-- <div class="card-body">
                     <div class="form-check form-switch">
                         <label for="" class="form-check-label">
-                            Success or Pending
+                            Active or inactive
                         </label>
                         <input type="checkbox" name="status" id="" class="form-check-input" role="switch"
                             checked>
                     </div>
-                </div>
+                </div> --}}
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary">Create</button>
-                    <a href="{{ route('products.index') }}" class="btn btn-secondary">Back</a>
+                    <a href="{{ route('users.index') }}" class="btn btn-secondary">Back</a>
                 </div>
             </form>
         </div>

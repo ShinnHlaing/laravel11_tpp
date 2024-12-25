@@ -22,7 +22,7 @@
                     <a class="nav-link active" href="{{ route('products.index') }}">Products</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">Stocks</a>
+                    <a href="{{ route('users.index') }}" class="nav-link ">User</a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">Contact</a>
@@ -46,7 +46,8 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ $item->name }}</h5>
                             <p class="card-text">{{ $item->description }}</p>
-                            <p class="card-text"><strong>Price:</strong> ${{ $item->price }}</p>
+                            <p class="card-text"><strong>Price:</strong> {{ $item->price }}</p>
+                            <p class="card-text"><strong>Category:</strong> {{ $item['category']['name'] }}</p>
                             <p class="card-text"><strong>Status:</strong> {{ $item->status ? 'Success' : 'Pending' }}
                             </p>
                             <a href="{{ route('products.edit', $item->id) }}" class="btn btn-primary">Edit</a>

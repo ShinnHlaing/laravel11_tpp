@@ -3,8 +3,9 @@
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
-use App\Models\Product;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
@@ -44,7 +45,13 @@ Route::prefix('/tpp')->group(function () {
         return redirect()->route('tpp.admin');
     });
 });
-
+//user
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+Route::get('/users/{id}', [UserController::class, 'edit'])->name('users.edit');
+Route::post('/users/{id}', [UserController::class, 'delete'])->name('users.delete');
+Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
+Route::post('/users/{id}/update', [UserController::class, 'update'])->name('users.update');
 //category
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
@@ -63,6 +70,10 @@ Route::get('/products/{id}', [ProductController::class, 'edit'])->name('products
 Route::post('/products/{id}/update', [ProductController::class, 'update'])->name('products.update');
 Route::post('/proudcts/{id}', [ProductController::class, 'delete'])->name('products.delete');
 
-// Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Auth::routes(['register' => false]);
+Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

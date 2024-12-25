@@ -41,6 +41,13 @@
                             style="width: 50px; height:50px;">
                         <input type="file" name="image" class="form-control mt-2">
                     </div>
+                    <select name="category_id" class="form-select mb-3" id="">
+                        <option value="">Select Category</option>
+                        @foreach ($categories as $category)
+                            <option name="category_id" value="{{ $category->id }}">{{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
                     <div class="form-check form-switch form-control">
                         <label for="" class="form-check-label">
                             Success or Pending

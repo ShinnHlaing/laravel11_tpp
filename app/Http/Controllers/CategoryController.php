@@ -13,6 +13,7 @@ class CategoryController extends Controller
     protected $categoryRepository;
     public function __construct(CategoryRepositoryInterface $categoryRepository)
     {
+        $this->middleware('auth');
         $this->categoryRepository = $categoryRepository;
     }
 
@@ -29,6 +30,7 @@ class CategoryController extends Controller
 
     public function store(CategoryRequest $request)
     {
+
         $validatedData = $request->validated();
         $validatedData['status'] = $request->has('status') ? true : false;
         if ($request->hasFile('image')) {

@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Repositories\Category;
+namespace App\Repositories\User;
 
-interface CategoryRepositoryInterface
+interface UserRepositoryInterface
 {
     public function index();
     public function store($validatedData);
     public function show($id);
-    public function update();
 }

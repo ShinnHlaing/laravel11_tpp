@@ -25,6 +25,7 @@ class ProductUpdateRequest extends FormRequest
             'name' => 'required',
             'description' => 'required',
             'price' => 'required',
+            'category_id' => 'required|integer',
             'image' => 'nullable',
             'status' => 'nullable',
         ];
