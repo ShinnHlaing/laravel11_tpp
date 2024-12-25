@@ -16,13 +16,13 @@
             <a class="navbar-brand" href="#">Navbar</a>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ route('categories.index') }}">Categories</a>
+                    <a class="nav-link" href="{{ route('categories.index') }}">Categories</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('products.index') }}">Products</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('users.index') }}" class="nav-link">User</a>
+                    <a href="{{ route('users.index') }}" class="nav-link active">User</a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">Contact</a>
@@ -34,28 +34,31 @@
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
-        {{-- <h1>Category List</h1> --}}
-        <a href="{{ route('categories.create') }}" class="btn btn-outline-success mb-4">Create</a>
+
+        <a href="{{ route('users.create') }}" class="btn btn-outline-success mb-4">Create</a>
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
+                    <th class="bg-primary text-white">ID</th>
                     <th class="bg-primary text-white">Name</th>
-                    <th class="bg-primary text-white">Image</th>
-                    <th class="bg-primary text-white">Status</th>
-                    <th class="bg-primary text-white">Actions</th>
+                    <th class="bg-primary text-white">Email</th>
+                    <th class="bg-primary text-white">Create_date</th>
+                    <th class="bg-primary text-white">Action</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($categories as $category)
+                @foreach ($users as $user)
                     <tr>
-                        <td>{{ $category->name }}</td>
-                        <td><img src="{{ asset('categoryImages/' . $category->image) }}" alt="{{ $category->image }}"
+                        <td>{{ $user->id }}</td>
+                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->created_at }}</td>
+                        {{-- <td><img src="{{ asset('userImages/' . $user->image) }}" alt="{{ $user->image }}"
                                 style="width: 50px; height:50px;"></td>
-                        <td>{{ $category->status ? 'Active' : 'Inactive' }}</td>
+                        <td>{{ $user->status ? 'Active' : 'Inactive' }}</td> --}}
                         <td>
-                            <a href="{{ route('categories.edit', $category->id) }}"
-                                class="btn btn-primary mb-3">Edit</a>
-                            <form action="{{ route('categories.delete', $category->id) }}" method="POST">
+                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary mb-3">Edit</a>
+                            <form action="{{ route('users.delete', $user->id) }}" method="POST">
                                 @csrf
                                 <button class="btn btn-outline-danger">Delete</button>
                             </form>

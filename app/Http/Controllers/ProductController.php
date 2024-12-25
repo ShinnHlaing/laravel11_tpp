@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\ProductUpdateRequest;
+use App\Models\Category;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use Illuminate\Http\Request;
 use App\Models\Product;
@@ -14,7 +15,7 @@ class ProductController extends Controller
     protected $productRepository;
     public function __construct(ProductRepositoryInterface $productRepository)
     {
-        // $this->middleware('auth');
+        $this->middleware('auth');
         $this->productRepository = $productRepository;
     }
     public function index()
@@ -25,12 +26,13 @@ class ProductController extends Controller
     }
     public function create()
     {
-        $products = Product::get();
-        return view('products.create', compact('products'));
+        $categories = Category::get();
+        return view('products.create', compact('categories'));
     }
 
     public function store(ProductRequest $request)
     {
+        // dd($request->all());
         $validatedData = $request->validated();
 
         $validatedData['status'] = $request->has('status') ? true : false;
@@ -47,7 +49,8 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = $this->productRepository->show($id);
-        return view('products.edit', compact('product'));
+        $categories = Category::get();
+        return view('products.edit', compact('product', 'categories'));
     }
 
     public function update(ProductUpdateRequest $request)
@@ -68,6 +71,7 @@ class ProductController extends Controller
                 'name' => $validatedData['name'],
                 'description' => $validatedData['description'],
                 'price' => $validatedData['price'],
+                'category_id' => $validatedData['category_id'],
                 'image' => $imageName,
                 'status' => $request->status == 'on' ? 1 : 0,
             ]);
@@ -76,6 +80,7 @@ class ProductController extends Controller
                 'name' => $validatedData['name'],
                 'description' => $validatedData['description'],
                 'price' => $validatedData['price'],
+                'category_id' => $validatedData['category_id'],
                 'status' => $request->status == 'on' ? 1 : 0,
             ]);
         }
