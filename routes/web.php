@@ -20,10 +20,10 @@ Route::get('/blogs/{id}', function ($id) {
     return "This is blog page!- $id";
 });
 
-//naming route
+
 Route::get('/dashboard', function () {
-    return "Welcome from tpp";
-})->name('dashboard.tpp');
+    return view('index');
+})->name('dashboard');
 
 //redirect route
 //only naming route can redirect
@@ -45,13 +45,7 @@ Route::prefix('/tpp')->group(function () {
         return redirect()->route('tpp.admin');
     });
 });
-//user
-Route::get('/users', [UserController::class, 'index'])->name('users.index');
-Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
-Route::get('/users/{id}', [UserController::class, 'edit'])->name('users.edit');
-Route::post('/users/{id}', [UserController::class, 'delete'])->name('users.delete');
-Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
-Route::post('/users/{id}/update', [UserController::class, 'update'])->name('users.update');
+
 //category
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
@@ -77,3 +71,12 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+//user
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+
+Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
+Route::get('/users/{id}', [UserController::class, 'edit'])->name('users.edit');
+Route::post('/users/{id}/update', [UserController::class, 'update'])->name('users.update');
+Route::post('/users/{id}', [UserController::class, 'delete'])->name('users.delete');
