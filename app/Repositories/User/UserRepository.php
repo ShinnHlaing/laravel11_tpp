@@ -15,6 +15,11 @@ class UserRepository implements UserRepositoryInterface
     {
         return User::create($validatedData);
     }
+    public function update($validatedData, $id)
+    {
+        $user = User::find($id);
+        return $user->update($validatedData);
+    }
     public function show($id)
     {
         return User::find($id);
