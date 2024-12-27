@@ -19,5 +19,6 @@ class ProductRepository implements ProductRepositoryInterface
     public function show($id)
     {
         return Product::find($id);
+        return Product::with('category')->where('id', $id)->first();
     }
 }

@@ -29,9 +29,9 @@
                         <input type="file" name="image" class="form-control mt-2">
                     </div>
                     <select name="category_id" class="form-select mb-3" id="">
-                        <option value="">Select Category</option>
                         @foreach ($categories as $category)
-                            <option name="category_id" value="{{ $category->id }}">{{ $category->name }}
+                            <option name="category_id" value="{{ $category->id }}"
+                                {{ $product->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}
                             </option>
                         @endforeach
                     </select>
