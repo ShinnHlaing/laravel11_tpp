@@ -18,10 +18,21 @@ class AdminSeeder extends Seeder
         // User::factory()
         //     ->count(10)
         //     ->create();
-        User::create([
-            'name' => "Admin",
-            'email' => "admin@email.com",
+        $admin = User::create([
+            'name' => 'Admin',
+            'email' => 'admin@mail.com',
+            // 'phone' => "09777777777",
+            // 'address' => "Yangon, Myanmar",
             'password' => Hash::make('password'),
         ]);
+        $user = User::create([
+            'name' => "User",
+            'email' => "user@mail.com",
+            // 'phone' => "09888888888",
+            // 'address' => "Mandalay, Myanmar",
+            'password' => Hash::make('password'),
+        ]);
+        $admin->assignRole('admin');
+        $user->assignRole('user');
     }
 }
