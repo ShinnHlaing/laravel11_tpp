@@ -25,7 +25,11 @@
                     <tr>
                         <td>{{ $role->id }}</td>
                         <td>{{ $role->name }}</td>
-                        <td></td>
+                        <td>
+                            @foreach ($role->permissions as $permission)
+                                <span class="badge badge-primary">{{ $permission->name }}</span>
+                            @endforeach
+                        </td>
                         <td>
                             <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-primary mb-3">Edit</a>
                             <form action="{{ route('roles.delete', $role->id) }}" method="POST">

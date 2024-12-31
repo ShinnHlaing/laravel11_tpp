@@ -9,19 +9,27 @@ class RoleRepository implements RoleRepositoryInterface
 {
     public function index()
     {
-        return Role::get();
+        return Role::with('permissions')->get();
     }
     public function store($validatedData)
     {
-        return Role::create($validatedData);
+        $role = Role::create($validatedData);
+        if (isset($validatedData['permissions'])) {
+            $role->permissions()->sync($validatedData['permissions']);
+        }
+        return $role;
     }
     public function update($validatedData, $id)
     {
         $role = Role::find($id);
-        return $role->update($validatedData);
+        $role->update($validatedData);
+        if (isset($validatedData['permissions'])) {
+            $role->permissions()->sync($validatedData['permissions']);
+        }
+        return $role;
     }
     public function show($id)
     {
-        return Role::find($id);
+        return Role::with('permissions')->find($id);
     }
 }

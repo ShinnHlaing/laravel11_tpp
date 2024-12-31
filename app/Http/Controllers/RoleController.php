@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Permission;
 use App\Repositories\Role\RoleRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -14,23 +15,28 @@ class RoleController extends Controller
     }
     public function index()
     {
+
         $roles = $this->roleRepository->index();
         return view('roles.index', compact('roles'));
     }
     public function create()
     {
-        return view('roles.create');
+        $permissions = Permission::all();
+        return view('roles.create', compact('permissions'));
     }
     public function edit($id)
     {
         $role = $this->roleRepository->show($id);
-        return view('roles.edit', compact('role'));
+        $permissions = Permission::all();
+        return view('roles.edit', compact('role', 'permissions'));
     }
     public function store(Request $request)
     {
         $validatedData = $request->validate([
             'name' => 'required',
             'guard_name' => 'nullable',
+            'permissions' => 'array',
+            'permissions.*' => 'exists:permissions,id',
         ]);
 
         // Set default value for guard_name if not provided
@@ -39,21 +45,23 @@ class RoleController extends Controller
         }
 
         $this->roleRepository->store($validatedData);
-        return redirect()->route('roles.index');
+        return redirect()->route('roles.index')->with('success', 'Role created successfully');
     }
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
             'name' => 'required',
             'guard_name' => 'nullable',
+            'permissions' => 'array',
+            'permissions.*' => 'exists:permissions,id',
         ]);
-        $this->roleRepository->update($validatedData, $request->id);
-        return redirect()->route('roles.index');
+        $this->roleRepository->update($validatedData, $id);
+        return redirect()->route('roles.index')->with('success', 'Role updated successfully');
     }
     public function delete($id)
     {
         $role = $this->roleRepository->show($id);
         $role->delete();
-        return redirect()->route('roles.index');
+        return redirect()->route('roles.index')->with('success', 'Role deleted successfully');
     }
 }
