@@ -25,6 +25,15 @@
                         <input type="email" name="email" class="form-control" placeholder="Enter Email" required />
                     </div>
                     <div class="form-group">
+                        @foreach ($roles as $role)
+                            <div>
+                                <input type="checkbox" class="input-check-label" name="roles[]"
+                                    id="role_{{ $role->id }}" value="{{ $role->id }}">
+                                <label for="role_{{ $role->id }}" class="form-check-label">{{ $role->name }}</label>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="form-group">
                         <input type="file" name="image" class="form-control" />
                     </div>
                     <div class="form-group">

@@ -16,6 +16,7 @@
                 <tr>
                     <th class="bg-primary text-white">No</th>
                     <th class="bg-primary text-white">Name</th>
+                    <th class="bg-primary text-white">Role</th>
                     <th class="bg-primary text-white">Action</th>
                 </tr>
             </thead>
@@ -24,6 +25,12 @@
                     <tr>
                         <td>{{ $permission->id }}</td>
                         <td>{{ $permission->name }}</td>
+                        <td>
+                            @foreach ($permission->roles as $role)
+                                <span class="badge badge-primary">{{ $role->name }}</span>
+                            @endforeach
+                        </td>
+
                         <td>
                             <a href="{{ route('permissions.edit', $permission->id) }}" class="btn btn-primary mb-3">Edit</a>
                             <form action="{{ route('permissions.delete', $permission->id) }}" method="POST">

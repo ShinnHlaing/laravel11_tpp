@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
+use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdateRequest;
 use Illuminate\Http\Request;
-use App\Models\User;
 
 class UserController extends Controller
 {
@@ -20,18 +21,21 @@ class UserController extends Controller
     public function index()
     {
         $users = $this->userRepository->index();
+        // dd($users);
         return view('users.index', compact('users'));
     }
 
     public function create()
     {
-        return view('users.create');
+        $roles = Role::all();
+        return view('users.create', compact('roles'));
     }
 
     public function  edit($id)
     {
+        $roles = Role::all();
         $user = $this->userRepository->show($id);
-        return view('users.edit', compact('user'));
+        return view('users.edit', compact('user', 'roles'));
     }
 
     public function store(UserRequest $request)
@@ -43,20 +47,24 @@ class UserController extends Controller
             $request->image->move(public_path('userImages'), $ImageName);
             $validatedData = array_merge($validatedData, ['image' => $ImageName]);
         }
-        $this->userRepository->store($validatedData);
+        $user = $this->userRepository->store($validatedData);
+        $user->roles()->attach($validatedData['roles']);
         return redirect()->route('users.index');
     }
 
-    public function update(UserUpdateRequest $request)
+    public function update(UserUpdateRequest $request, $id)
     {
         $validatedData = $request->validated();
+
+        $user = $this->userRepository->show($id);
+
         if ($request->filled('password')) {
             $validatedData = array_merge($validatedData, ['password' => $request->password]);
         } else {
             unset($validatedData['password']);
         }
+
         if ($request->hasFile('image')) {
-            $user = $this->userRepository->show($request->id);
             if ($user->image) {
                 $oldImagePath = public_path('userImages') . '/' . $user->image;
                 if (file_exists($oldImagePath)) {
@@ -66,20 +74,10 @@ class UserController extends Controller
             $ImageName = time() . '.' . $request->image->extension();
             $request->image->move(public_path('userImages'), $ImageName);
             $validatedData = array_merge($validatedData, ['image' => $ImageName]);
-
-            $validated_with_img = [
-                'name' => $validatedData['name'],
-                'email' => $validatedData['email'],
-                'image' => $ImageName,
-            ];
-            $this->userRepository->update($validated_with_img, $request->id);
-        } else {
-            $validated_without_img = [
-                'name' => $validatedData['name'],
-                'email' => $validatedData['email'],
-            ];
-            $this->userRepository->update($validated_without_img, $request->id);
         }
+        $user->update($validatedData);
+        $user->roles()->sync($validatedData['roles']);
+
         return redirect()->route('users.index')->with('success', 'user updated successfully.');
     }
 

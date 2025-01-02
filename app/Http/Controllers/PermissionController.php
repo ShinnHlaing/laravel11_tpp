@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Spatie\Permission\Models\Role;
 use App\Repositories\Permission\PermissionRepositoryInterface;
 use Illuminate\Http\Request;
 
@@ -22,43 +23,45 @@ class PermissionController extends Controller
 
     public function create()
     {
-        return view('permissions.create');
+        $roles = Role::get();
+        return view('permissions.create', compact('roles'));
     }
 
     public function edit($id)
     {
         $permission = $this->permissionRepository->show($id);
-        return view('permissions.edit', compact('permission'));
+        $roles = Role::all();
+        $permissionRole = $permission->roles->pluck('id')->toArray();
+        return view('permissions.edit', compact('permission', 'roles', 'permissionRole'));
     }
 
     public function store(Request $request)
     {
         $validatedData = $request->validate([
             'name' => 'required',
+            'roles' => 'array',
+            'roles*.' => 'exists:roles,id'
         ]);
 
-        if (empty($validatedData['guard_name'])) {
-            $validatedData['guard_name'] = 'default_guard_name';
-        }
         $this->permissionRepository->store($validatedData);
         return redirect()->route('permissions.index');
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
             'name' => 'required',
-            'gurd_name' => 'nullable',
+            'roles' => 'array',
+            'roles*.' => 'exists:roles,id'
         ]);
 
-        $this->permissionRepository->update($validatedData, $request->id);
+        $this->permissionRepository->update($validatedData, $id);
         return redirect()->route('permissions.index');
     }
 
     public function delete($id)
     {
-        $permission = $this->permissionRepository->show($id);
-        $permission->delete();
+        $this->permissionRepository->destory($id);
         return redirect()->route('permissions.index');
     }
 }

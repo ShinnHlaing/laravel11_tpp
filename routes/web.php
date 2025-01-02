@@ -80,8 +80,8 @@ Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
 Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
 Route::get('/users/{id}', [UserController::class, 'edit'])->name('users.edit');
-Route::post('/users/{id}/update', [UserController::class, 'update'])->name('users.update');
 Route::post('/users/{id}', [UserController::class, 'delete'])->name('users.delete');
+Route::post('/users/{id}/update', [UserController::class, 'update'])->name('users.update');
 
 //role
 Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');

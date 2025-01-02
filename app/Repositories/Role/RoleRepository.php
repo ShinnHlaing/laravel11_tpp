@@ -2,14 +2,16 @@
 
 namespace App\Repositories\Role;
 
-use App\Models\Role;
+
 use App\Repositories\Role\RoleRepositoryInterface;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RoleRepository implements RoleRepositoryInterface
 {
     public function index()
     {
-        return Role::with('permissions')->get();
+        return Role::get();
     }
     public function store($validatedData)
     {
@@ -21,7 +23,7 @@ class RoleRepository implements RoleRepositoryInterface
     }
     public function update($validatedData, $id)
     {
-        $role = Role::find($id);
+        $role = Role::where('id', $id)->first();
         $role->update($validatedData);
         if (isset($validatedData['permissions'])) {
             $role->permissions()->sync($validatedData['permissions']);
@@ -30,6 +32,11 @@ class RoleRepository implements RoleRepositoryInterface
     }
     public function show($id)
     {
-        return Role::with('permissions')->find($id);
+        return Role::with('permissions')->where('id', $id)->first();
+    }
+    public function destory($id)
+    {
+        $role = Role::where('id', $id)->first();
+        return $role->delete();
     }
 }
