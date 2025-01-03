@@ -3,19 +3,23 @@
 namespace App\Http\Controllers;
 
 use Spatie\Permission\Models\Role;
-use App\Models\User;
+use App\Services\User\UserService;
+use App\Repositories\Role\RoleRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdateRequest;
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     protected $userRepository;
-    public function __construct(UserRepositoryInterface $userRepository)
+    protected $userService;
+    protected $roleRepository;
+    public function __construct(UserRepositoryInterface $userRepository, RoleRepositoryInterface $roleRepository, UserService $userService)
     {
         $this->middleware('auth');
         $this->userRepository = $userRepository;
+        $this->roleRepository = $roleRepository;
+        $this->userService = $userService;
     }
 
     public function index()
@@ -26,20 +30,19 @@ class UserController extends Controller
 
     public function create()
     {
-        $roles = Role::all();
+        $roles = $this->roleRepository->index();
         return view('users.create', compact('roles'));
     }
 
     public function  edit($id)
     {
-        $roles = Role::all();
+        $roles =  $this->roleRepository->index();
         $user = $this->userRepository->show($id);
         return view('users.edit', compact('user', 'roles'));
     }
 
     public function store(UserRequest $request)
     {
-
         $validatedData = $request->validated();
         if ($request->hasFile('image')) {
             $ImageName = time() . '.' . $request->image->extension();
@@ -89,5 +92,10 @@ class UserController extends Controller
         } else {
             return redirect()->route('users.index')->with('error', 'User not found.');
         }
+    }
+    public function status($id)
+    {
+        $this->userService->status($id);
+        return redirect()->route('users.index');
     }
 }

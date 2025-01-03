@@ -24,11 +24,15 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
-                        @if ($user->status == 1)
-                            <td><span class="badge badge-success">Active</span></td>
-                        @else
-                            <td><span class="badge badge-danger">Inactive</span></td>
-                        @endif
+                        <td>
+                            <form action="{{ route('users.status', ['id' => $user->id]) }}" method="POST">
+                                @csrf
+                                <button type="submit"
+                                    class="btn btn-s {{ $user->status == 1 ? 'btn-success' : 'btn-danger' }}">
+                                    {{ $user->status == 1 ? 'Active' : 'Inactive' }}
+                                </button>
+                            </form>
+                        </td>
                         <td>
                             @foreach ($user->roles as $role)
                                 <span class="badge badge-primary">{{ $role->name }}</span>

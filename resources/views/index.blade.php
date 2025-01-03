@@ -80,7 +80,7 @@
                                     {{-- <div class="widget-subheading">Last year expenses</div> --}}
                                 </div>
                                 <div class="widget-content-right">
-                                    <div class="widget-numbers text-white"><span>{{ $totalUsers }}</span></div>
+                                    <div class="widget-numbers text-white"><span></span></div>
                                 </div>
                             </div>
                         </div>

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 //static route
@@ -99,3 +99,5 @@ Route::post('/permissions/store', [PermissionController::class, 'store'])->name(
 Route::get('/permissions/{id}', [PermissionController::class, 'edit'])->name('permissions.edit');
 Route::post('/permissions/{id}/update', [PermissionController::class, 'update'])->name('permissions.update');
 Route::post('/permissions/{id}', [PermissionController::class, 'delete'])->name('permissions.delete');
+// service
+Route::post('/status/{id}/status', [UserController::class, 'status'])->name('users.status');
