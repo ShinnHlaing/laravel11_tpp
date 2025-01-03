@@ -12,6 +12,7 @@
                     <th class="bg-primary text-white">No</th>
                     <th class="bg-primary text-white">Name</th>
                     <th class="bg-primary text-white">Email</th>
+                    <th class="bg-primary text-white">Status</th>
                     <th class="bg-primary text-white">Role</th>
                     <th class="bg-primary text-white">Profile</th>
                     <th class="bg-primary text-white">Action</th>
@@ -23,6 +24,11 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
+                        @if ($user->status == 1)
+                            <td><span class="badge badge-success">Active</span></td>
+                        @else
+                            <td><span class="badge badge-danger">Inactive</span></td>
+                        @endif
                         <td>
                             @foreach ($user->roles as $role)
                                 <span class="badge badge-primary">{{ $role->name }}</span>

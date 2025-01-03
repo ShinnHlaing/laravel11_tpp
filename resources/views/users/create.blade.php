@@ -25,6 +25,12 @@
                         <input type="email" name="email" class="form-control" placeholder="Enter Email" required />
                     </div>
                     <div class="form-group">
+                        <select name="status" id="status" class="form-select">
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         @foreach ($roles as $role)
                             <div>
                                 <input type="checkbox" class="input-check-label" name="roles[]"

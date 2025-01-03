@@ -72,7 +72,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // Auth::routes(['register' => false]);
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 
 //user
 Route::get('/users', [UserController::class, 'index'])->name('users.index');

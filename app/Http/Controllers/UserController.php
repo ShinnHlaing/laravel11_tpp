@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
+use Spatie\Permission\Models\Role;
 use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Requests\UserRequest;
@@ -14,14 +14,13 @@ class UserController extends Controller
     protected $userRepository;
     public function __construct(UserRepositoryInterface $userRepository)
     {
-        // $this->middleware('auth');
+        $this->middleware('auth');
         $this->userRepository = $userRepository;
     }
 
     public function index()
     {
         $users = $this->userRepository->index();
-        // dd($users);
         return view('users.index', compact('users'));
     }
 
@@ -40,7 +39,7 @@ class UserController extends Controller
 
     public function store(UserRequest $request)
     {
-        // dd($request->all());
+
         $validatedData = $request->validated();
         if ($request->hasFile('image')) {
             $ImageName = time() . '.' . $request->image->extension();
@@ -55,7 +54,7 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, $id)
     {
         $validatedData = $request->validated();
-
+        // dd($validatedData);
         $user = $this->userRepository->show($id);
 
         if ($request->filled('password')) {
