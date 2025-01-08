@@ -34,10 +34,12 @@
             <ul class="vertical-nav-menu">
                 <li class="app-sidebar__heading">Dashboards</li>
                 <li>
-                    <a href="{{ route('dashboard') }}" class="mm-active">
-                        <i class="metismenu-icon pe-7s-rocket"></i>
-                        TPP Dashboard
-                    </a>
+                    @can('dashboard')
+                        <a href="{{ route('dashboard') }}" class="mm-active">
+                            <i class="metismenu-icon pe-7s-rocket"></i>
+                            TPP Dashboard
+                        </a>
+                    @endcan
                 </li>
                 <li class="app-sidebar__heading">UI Components</li>
                 <li>
@@ -58,6 +60,18 @@
                     <a href="{{ route('users.index') }}">
                         <i class="metismenu-icon pe-7s-display2"></i>
                         User
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('roles.index') }}">
+                        <i class="metismenu-icon pe-7s-display2"></i>
+                        Role
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('permissions.index') }}">
+                        <i class="metismenu-icon pe-7s-display2"></i>
+                        Permission
                     </a>
                 </li>
             </ul>

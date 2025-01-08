@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use Spatie\Permission\Models\Role;
+use App\Services\User\UserService;
+use App\Repositories\Role\RoleRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserUpdateRequest;
-use Illuminate\Http\Request;
-use App\Models\User;
 
 class UserController extends Controller
 {
     protected $userRepository;
-    public function __construct(UserRepositoryInterface $userRepository)
+    protected $userService;
+    protected $roleRepository;
+    public function __construct(UserRepositoryInterface $userRepository, RoleRepositoryInterface $roleRepository, UserService $userService)
     {
-        // $this->middleware('auth');
+        $this->middleware('auth');
         $this->userRepository = $userRepository;
+        $this->roleRepository = $roleRepository;
+        $this->userService = $userService;
     }
 
     public function index()
@@ -25,38 +30,43 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('users.create');
+        $roles = $this->roleRepository->index();
+        return view('users.create', compact('roles'));
     }
 
     public function  edit($id)
     {
+        $roles =  $this->roleRepository->index();
         $user = $this->userRepository->show($id);
-        return view('users.edit', compact('user'));
+        return view('users.edit', compact('user', 'roles'));
     }
 
     public function store(UserRequest $request)
     {
-        // dd($request->all());
         $validatedData = $request->validated();
         if ($request->hasFile('image')) {
             $ImageName = time() . '.' . $request->image->extension();
             $request->image->move(public_path('userImages'), $ImageName);
             $validatedData = array_merge($validatedData, ['image' => $ImageName]);
         }
-        $this->userRepository->store($validatedData);
+        $user = $this->userRepository->store($validatedData);
+        $user->roles()->attach($validatedData['roles']);
         return redirect()->route('users.index');
     }
 
-    public function update(UserUpdateRequest $request)
+    public function update(UserUpdateRequest $request, $id)
     {
         $validatedData = $request->validated();
+        // dd($validatedData);
+        $user = $this->userRepository->show($id);
+
         if ($request->filled('password')) {
             $validatedData = array_merge($validatedData, ['password' => $request->password]);
         } else {
             unset($validatedData['password']);
         }
+
         if ($request->hasFile('image')) {
-            $user = $this->userRepository->show($request->id);
             if ($user->image) {
                 $oldImagePath = public_path('userImages') . '/' . $user->image;
                 if (file_exists($oldImagePath)) {
@@ -66,20 +76,10 @@ class UserController extends Controller
             $ImageName = time() . '.' . $request->image->extension();
             $request->image->move(public_path('userImages'), $ImageName);
             $validatedData = array_merge($validatedData, ['image' => $ImageName]);
-
-            $validated_with_img = [
-                'name' => $validatedData['name'],
-                'email' => $validatedData['email'],
-                'image' => $ImageName,
-            ];
-            $this->userRepository->update($validated_with_img, $request->id);
-        } else {
-            $validated_without_img = [
-                'name' => $validatedData['name'],
-                'email' => $validatedData['email'],
-            ];
-            $this->userRepository->update($validated_without_img, $request->id);
         }
+        $user->update($validatedData);
+        $user->roles()->sync($validatedData['roles']);
+
         return redirect()->route('users.index')->with('success', 'user updated successfully.');
     }
 
@@ -92,5 +92,10 @@ class UserController extends Controller
         } else {
             return redirect()->route('users.index')->with('error', 'User not found.');
         }
+    }
+    public function status($id)
+    {
+        $this->userService->status($id);
+        return redirect()->route('users.index');
     }
 }

@@ -64,7 +64,11 @@
                 <div class="widget-content p-0">
                     <div class="widget-content-wrapper">
                         <div class="widget-content-left">
-                            <div class="btn-group">
+                            <div class="widget-heading">
+                                {{-- {{ Auth::user()->image }} --}}
+                                {{-- <img src="{{ asset('userImages/'.  Auth::user()->image ') }}" alt=""> --}}
+                            </div>
+                            {{-- <div class="btn-group">
                                 <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
                                     <img width="42" class="rounded-circle" src="assets/images/avatars/1.jpg"
                                         alt="">
@@ -80,7 +84,8 @@
                                     <div tabindex="-1" class="dropdown-divider"></div>
                                     <button type="button" tabindex="0" class="dropdown-item">Dividers</button>
                                 </div>
-                            </div>
+                            </div> --}}
+
                         </div>
                         <div class="widget-content-left  ml-3 header-user-info">
                             <div class="widget-heading">

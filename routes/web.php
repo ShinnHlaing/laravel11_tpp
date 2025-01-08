@@ -4,11 +4,13 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PermissionController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 //static route
@@ -70,7 +72,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // Auth::routes(['register' => false]);
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 
 //user
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -78,5 +80,24 @@ Route::get('/users', [UserController::class, 'index'])->name('users.index');
 Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
 Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
 Route::get('/users/{id}', [UserController::class, 'edit'])->name('users.edit');
-Route::post('/users/{id}/update', [UserController::class, 'update'])->name('users.update');
 Route::post('/users/{id}', [UserController::class, 'delete'])->name('users.delete');
+Route::post('/users/{id}/update', [UserController::class, 'update'])->name('users.update');
+
+//role
+Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
+Route::post('/roles/store', [RoleController::class, 'store'])->name('roles.store');
+Route::get('/roles/{id}', [RoleController::class, 'edit'])->name('roles.edit');
+Route::post('/roles/{id}/update', [RoleController::class, 'update'])->name('roles.update');
+Route::post('/roles/{id}', [RoleController::class, 'delete'])->name('roles.delete');
+
+//permission
+// Route::resource('permissions', PermissionController::class);
+Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
+Route::get('/permissions/create', [PermissionController::class, 'create'])->name('permissions.create');
+Route::post('/permissions/store', [PermissionController::class, 'store'])->name('permissions.store');
+Route::get('/permissions/{id}', [PermissionController::class, 'edit'])->name('permissions.edit');
+Route::post('/permissions/{id}/update', [PermissionController::class, 'update'])->name('permissions.update');
+Route::post('/permissions/{id}', [PermissionController::class, 'delete'])->name('permissions.delete');
+// service
+Route::post('/status/{id}/status', [UserController::class, 'status'])->name('users.status');

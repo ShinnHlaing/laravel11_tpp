@@ -1,6 +1,7 @@
 @extends('layouts.master')
 @section('content')
     <div class="container">
+        {{-- {{ dd($roles) }} --}}
         @if ($errors->any())
             <div class="text-danger">
                 <ul>
@@ -21,6 +22,21 @@
                         id="" class="form-control card-body" />
                     <input type="text" value="{{ $user->email }}" name="email" placeholder="Enter User Email"
                         id="" class="form-control card-body" />
+                    <div class="card-body">
+                        <select name="status" id="" class="form-select">
+                            <option value="1" {{ $user->status == 1 ? 'selected' : '' }}>Active</option>
+                            <option value="0" {{ $user->status == 0 ? 'selected' : '' }}>Inactive</option>
+                        </select>
+                    </div>
+                    <div class="card-body">
+                        <select name="roles[]" id="" class="form-select">
+                            @foreach ($roles as $role)
+                                <option value="{{ $role->id }}"
+                                    {{ $user->roles->contains($role->id) ? 'selected' : '' }}>
+                                    {{ $role->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="cardbody mb-3">
                         <img src="{{ asset('userImages/' . $user->image) }}" alt="{{ $user->image }}"
                             style="width: 50px; height:50px;">

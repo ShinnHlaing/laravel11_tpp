@@ -48,8 +48,8 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $product = $this->productRepository->show($id);
         $categories = Category::get();
+        $product = $this->productRepository->show($id);
         return view('products.edit', compact('product', 'categories'));
     }
 

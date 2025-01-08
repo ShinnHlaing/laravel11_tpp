@@ -12,6 +12,8 @@
                     <th class="bg-primary text-white">No</th>
                     <th class="bg-primary text-white">Name</th>
                     <th class="bg-primary text-white">Email</th>
+                    <th class="bg-primary text-white">Status</th>
+                    <th class="bg-primary text-white">Role</th>
                     <th class="bg-primary text-white">Profile</th>
                     <th class="bg-primary text-white">Action</th>
                 </tr>
@@ -22,6 +24,20 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
+                        <td>
+                            <form action="{{ route('users.status', ['id' => $user->id]) }}" method="POST">
+                                @csrf
+                                <button type="submit"
+                                    class="btn btn-s {{ $user->status == 1 ? 'btn-success' : 'btn-danger' }}">
+                                    {{ $user->status == 1 ? 'Active' : 'Inactive' }}
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            @foreach ($user->roles as $role)
+                                <span class="badge badge-primary">{{ $role->name }}</span>
+                            @endforeach
+                        </td>
                         <td>
                             <img src="{{ asset('userImages/' . $user->image) }}" alt="{{ $user->image }}"
                                 style="width: 50px; height:50px;">
