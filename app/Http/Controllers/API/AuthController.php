@@ -10,6 +10,7 @@ use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
 
 class AuthController extends BaseController
 {
@@ -38,21 +39,27 @@ class AuthController extends BaseController
     {
         try {
             $validateUser = Validator::make($request->all(), [
-                'name' => 'required',
-                'email' => 'required|email|unique:users,email,except,id',
-                'password' => 'required',
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|string|min:8',
+                'roles' => 'required|integer'
             ]);
             if ($validateUser->fails()) {
                 return $this->error('Validation Error', $validateUser->errors(), 422);
             }
+
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => Hash::make($request->password)
+                'password' => Hash::make($request->password),
             ]);
+            if ($request->has('roles')) {
+                $user->roles()->sync($request->roles);
+            }
+
             return $this->success($user, 'User Created successfully!', 201);
         } catch (Exception $e) {
-            return $this->error($e->getMessage() ? $e->getMessage() : "Internal server error", null, $e->getCode() ? $e->getCode() : $e->getCode());
+            return $this->error($e->getMessage() ? $e->getMessage() : "Internal server error", null, $e->getCode() ? $e->getCode() : 500);
         }
     }
 }
