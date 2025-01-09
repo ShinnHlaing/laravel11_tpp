@@ -12,6 +12,7 @@ class BaseController extends Controller
         $response = [
             'code' => $code,
             'success' => true,
+            // 'total' => count($result),
             'data' => $result,
             'message' => $message,
         ];

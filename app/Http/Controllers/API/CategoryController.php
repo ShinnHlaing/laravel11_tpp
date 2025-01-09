@@ -8,12 +8,25 @@ use Illuminate\Http\Request;
 use App\Http\Resources\CategoryResource;
 use App\Http\Controllers\API\BaseController;
 use Illuminate\Support\Facades\Validator;
+use App\Repositories\Category\CategoryRepositoryInterface;
 
 class CategoryController extends BaseController
 {
     /**
      * Display a listing of the resource.
      */
+    protected $categoryRepository;
+
+    public function __construct(CategoryRepositoryInterface $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+
+        $this->middleware('permission:categoryList', ['only' => ['index']]);
+        $this->middleware('permission:categoryCreate', ['only' => ['store']]);
+        $this->middleware('permission:categoryEdit', ['only' => ['update']]);
+        $this->middleware('permission:categoryDelete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $categories = Category::get();
